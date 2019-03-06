@@ -1,0 +1,3 @@
+# SmashBot
+
+Infos à ajouter
