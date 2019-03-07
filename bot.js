@@ -2,25 +2,49 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const fetch = require('node-fetch');
 const fs = require('file-system');
+const config = require('./config.json');
+
+const fox = require('./characters/fox.js')
 
 client.on("ready", () => {
     console.log("I am ready!");
 });
 
 client.on("message", (message) => {
-    let reponse = "";
-    if (message.content.startsWith("ping")) {
-        fetch('http://smashlounge.com/api/attack/char/10')
-            .then(response => response.json())
-            .then((data) => {
-                fs.writeFile(__dirname + '/data/test.json', JSON.stringify(data), function(err, result){
-                    if (err) {
-                        console.log("error writefile : ", err);
-                    }
-                })
-            });
-        message.channel.send("voir fichier!");
+    let prefix = false;
+    for(const thisPrefix of config.prefixes) {
+        if(message.content.startsWith(thisPrefix)) {
+            prefix = thisPrefix;
+        }
+    }
+    if (!prefix || message.author.bot) return;
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+
+    switch (command) {
+        case 'ping':
+            message.channel.send("Test réussi!");
+            break;
+        case 'salut':
+            message.channel.send("Salut " + message.author.username + '! Tu as dis : ' + args[0]);
+            break;
+        case 'fox':
+            for (const arg of args) {
+                switch(arg){
+                    case 'air':
+                        message.channel.send(fox.getAerial("oui"));
+                        break;
+                    case 'smash':
+                        message.channel.send(fox.getSmash("yes"));
+                        break;
+                    case 'special':
+                        message.channel.send(fox.getSpecial("oui"));
+                        break;
+                }
+            }
+            break;
     }
 });
 
-client.login("NDc3OTUyNjkyMzA4NjcyNTEz.D2KfBg.937VIv9Kl19RrCCnE8OKXTbGSxM");
+client.login(config.token);
