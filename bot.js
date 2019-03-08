@@ -1,13 +1,14 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const fetch = require('node-fetch');
-const fs = require('file-system');
 const config = require('./config.json');
 
-const fox = require('./characters/fox.js')
+const fox = require('./characters/fox.js');
+
+const data = require('./get/getTest.js');
 
 client.on("ready", () => {
     console.log("I am ready!");
+    data.data();
 });
 
 client.on("message", (message) => {
@@ -26,22 +27,16 @@ client.on("message", (message) => {
         case 'ping':
             message.channel.send("Test réussi!");
             break;
-        case 'salut':
-            message.channel.send("Salut " + message.author.username + '! Tu as dis : ' + args[0]);
+        case 'test':
+            message.channel.send({embed : {
+                color: 3447003,
+                description: 'Ceci est un type de message'
+            }});
             break;
         case 'fox':
             for (const arg of args) {
-                switch(arg){
-                    case 'air':
-                        message.channel.send(fox.getAerial("oui"));
-                        break;
-                    case 'smash':
-                        message.channel.send(fox.getSmash("yes"));
-                        break;
-                    case 'special':
-                        message.channel.send(fox.getSpecial("oui"));
-                        break;
-                }
+                message.channel.send(fox.getData(arg));
+                break;
             }
             break;
     }
