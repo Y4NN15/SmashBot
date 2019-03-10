@@ -2,7 +2,7 @@ const fox = require('../data/6.json');
 const Discord = require("discord.js");
 const fetch = require('node-fetch');
 
-exports.getData = function(attack){
+exports.getData = async function(attack){
     switch(attack){
         /*
          * SPECIALS
@@ -14,7 +14,7 @@ exports.getData = function(attack){
             return this.card('laser');
             break;
         case 'neutralb':
-            return this.requestGif(748);
+            return this.gif('748');
             break;
         case 'sideb':
             break;
@@ -107,35 +107,21 @@ exports.getData = function(attack){
     }
 }
 
-exports.card = function(content){
+exports.card = async function(content){
     const embed = new Discord.RichEmbed()
         .setTitle("Fox " + content)
         .setColor(3447003)
-        .setDescription("Description de l'attaque")
-        .setFooter("Texte de footer")
+        .setDescription("Frames")
         .setThumbnail('https://i.imgur.com/e6iqFph.png')
-        //.setImage(this.requestGif(748))
-        .addField("Titre de la catégorie", "Valeur de la catégorie", true)
-        .addBlankField(true)
-        .addField('Deuxième catégorie', "Valeur", true);
+        .addField("Total Frames", fox.attacks.special[0].total_frames, true)
+        .addField('Active Frames', fox.attacks.special[0].active_start + ' - ' + fox.attacks.special[0].active_end, true)
+        .addBlankField(true);
     return embed;
 }
 
-exports.requestGif = function(id){
-    /*const url = fetch('https://smashlounge.herokuapp.com/gif/' + id)
-        .then(response => response.json())
-        .then((data) => {
-            let rep = JSON.stringify(data);
-            console.log("REP : " + rep);
-            console.log("REP.URL : " + rep.url);
-            return rep.url;
-        });
-    console.log("URL : " + url);*/
-    const request = async () => {
-        const response = await fetch('https://smashlounge.herokuapp.com/gif/' + id);
-        const jsonRep = await response.json();
-        return jsonRep.url;
-    }
-    return "https://gfycat.com/" + request();
+exports.gif = async function(id){
+    let rep = await fetch('https://smashlounge.herokuapp.com/gif/' + id).then(response => response.json());
+    let url = rep.url;
+    return "https://gfycat.com/" + url;
 }
 

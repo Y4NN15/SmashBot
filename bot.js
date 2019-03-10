@@ -1,17 +1,16 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require('./config.json');
-
+const fetch = require('node-fetch');
 const fox = require('./characters/fox.js');
 
 const data = require('./get/getTest.js');
 
 client.on("ready", () => {
     console.log("I am ready!");
-    data.data();
 });
 
-client.on("message", (message) => {
+client.on("message", async message => {
     let prefix = false;
     for(const thisPrefix of config.prefixes) {
         if(message.content.startsWith(thisPrefix)) {
@@ -27,19 +26,16 @@ client.on("message", (message) => {
         case 'ping':
             message.channel.send("Test réussi!");
             break;
-        case 'test':
-            message.channel.send({embed : {
-                color: 3447003,
-                description: 'Ceci est un type de message'
-            }});
-            break;
         case 'fox':
-            for (const arg of args) {
-                message.channel.send(fox.getData(arg));
-                break;
+            for (let arg of args) {
+                message.channel.send(await fox.getData(arg));
             }
             break;
     }
 });
 
 client.login(config.token);
+
+exports.getUrl = function(id){
+
+}
