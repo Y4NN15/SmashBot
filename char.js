@@ -1,39 +1,40 @@
-const fox = require('../data/fox.json');
 const Discord = require("discord.js");
 const fetch = require('node-fetch');
 
-exports.getData = async function(attack){
+exports.getData = async function(character, attack){
+    let char = require('./data/'+character+'.json');
+
     switch(attack){
         /*
          * SPECIALS
          */
         case 'upb':
-            return this.card(fox.attacks.special[4]);
+            return this.card(char.attacks.special[0]);
             break;
-        case 'laser':
+        // case 'laser':
         case 'neutralb':
-            return this.card(fox.attacks.special[0]);
+            return this.card(char.attacks.special[1]);
             break;
         case 'sideb':
-            return this.card(fox.attacks.special[2]);
+            return this.card(char.attacks.special[2]);
             break;
-        case 'shine':
+        // case 'shine':
         case 'downb':
-            return this.card(fox.attacks.special[3]);
+            return this.card(char.attacks.special[3]);
             break;
 
         /*
         * JABS
         */
         case 'jab1':
-            return this.card(fox.attacks.jab[0]);
+            return this.card(char.attacks.jab[0]);
             break;
         case 'jab2':
-            return this.card(fox.attacks.jab[1]);
+            return this.card(char.attacks.jab[1]);
             break;
         case 'jab3':
         case 'multijab':
-            return this.card(fox.attacks.jab[2]);
+            return this.card(char.attacks.jab[2]);
             break;/*
         case 'jabs':
             break;*/
@@ -43,21 +44,21 @@ exports.getData = async function(attack){
          */
         case 'utilt':
         case 'uptilt':
-            return this.card(fox.attacks.tilt[4]);
+            return this.card(char.attacks.tilt[0]);
             break;
         case 'ftilt':
-            return this.card(fox.attacks.tilt[2]);
+            return this.card(char.attacks.tilt[1]);
             break;
         case 'lowftilt':
         case 'ftiltlow':
-            return this.card(fox.attacks.tilt[1]);
+            return this.card(char.attacks.tilt[2]);
             break;
         case 'highftilt':
         case 'ftilthigh':
-            return this.card(fox.attacks.tilt[0]);
+            return this.card(char.attacks.tilt[3]);
             break;
         case 'dtilt':
-            return this.card(fox.attacks.tilt[3]);
+            return this.card(char.attacks.tilt[4]);
             break;
 
         /*
@@ -65,13 +66,13 @@ exports.getData = async function(attack){
          */
         case 'usmash':
         case 'upsmash':
-            return this.card(fox.attacks.smash[1]);
+            return this.card(char.attacks.smash[0]);
             break;
         case 'fsmash':
-            return this.card(fox.attacks.smash[0]);
+            return this.card(char.attacks.smash[1]);
             break;
         case 'dsmash':
-            return this.card(fox.attacks.smash[2]);
+            return this.card(char.attacks.smash[2]);
             break;
 
         /*
@@ -79,47 +80,50 @@ exports.getData = async function(attack){
          */
         case 'upair':
         case 'uair':
-            return this.card(fox.attacks.aerial[1]);
+            return this.card(char.attacks.aerial[0]);
             break;
         case 'fair':
-            return this.card(fox.attacks.aerial[3]);
+            return this.card(char.attacks.aerial[1]);
             break;
         case 'nair':
-            return this.card(fox.attacks.aerial[0]);
+            return this.card(char.attacks.aerial[2]);
             break;
         case 'dair':
         case 'downair':
         case 'drill':
-            return this.card(fox.attacks.aerial[2]);
+            return this.card(char.attacks.aerial[3]);
             break;
         case 'bair':
         case 'backair':
-            return this.card(fox.attacks.aerial[4]);
+            return this.card(char.attacks.aerial[4]);
             break;
 
         /*
          * OTHER
          */
         case 'roll':
-            return await this.card(fox.attacks.roll[1])
-            + "\n\n" +
-            await this.card(fox.attacks.roll[0]);
+            return await this.card(char.attacks.roll[0])
+                + "\n\n" +
+                await this.card(char.attacks.roll[1]);
             break;
         case 'dash':
-            return this.card(fox.attacks.dash[0]);
+            return this.card(char.attacks.dash[0]);
             break;
         case 'dashattack':
             break;
         case 'grab':
-            return await this.card(fox.attacks.grab[0])
-            + "\n\n" +
-            await this.card(fox.attacks.grab[1]);
+            return await this.card(char.attacks.grab[0])
+                + "\n\n" +
+                await this.card(char.attacks.grab[1]);
             break;
         case 'airdodge':
-            return this.card(fox.attacks.aerial[5]);
+            return this.card(char.attacks.aerial[5]);
             break;
         case 'spotdodge':
-            return this.card(fox.attacks.dodge[0]);
+            return this.card(char.attacks.dodge[0]);
+            break;
+        default:
+            return "Unknown attack. Please DM @Vek#1234 if you think it's a bug!";
             break;
     }
 };
@@ -134,10 +138,10 @@ exports.card = async function(move){
         .addField('Starting Frame', move.hit_start, true)
         .setImage(await this.gif(move.gif_id))
         .addBlankField(true);*/
-    const msg = "**Fox " + move.description + "**" + "\n\n" +
-    "_Total Frames_ : " + move.total_frames + "\n" +
-    "_Starting Frame_ : " + move.hit_start + "\n\n"
-    + await this.gif(move.gif_id);
+    const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
+        "_Total Frames_ : " + move.total_frames + "\n" +
+        "_Starting Frame_ : " + move.hit_start + "\n\n"
+        + await this.gif(move.gif_id);
     return msg; /*return embed;*/
 };
 
