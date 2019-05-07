@@ -27,6 +27,9 @@ client.on("message", async message => {
         case 'bonjour':
             message.channel.send("Salut :)");
             break;
+        case 'get':
+            message.channel.send("Oui oui t'auras tes infos bientôt c bon là");
+            break;
         default:
             for (let arg of args) {
                 message.channel.send(await char.getData(command, arg));

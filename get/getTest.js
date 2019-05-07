@@ -1,8 +1,9 @@
 const fetch = require('node-fetch');
 const fs = require('file-system');
+const fox = require('../data/fox.json');
 
 exports.data = function() {
-    for (let i = 1; i <= 26; i++) {
+    /* for (let i = 1; i <= 26; i++) {
         fetch('http://smashlounge.com/api/attack/char/' + i)
             .then(response => response.json())
             .then((data) => {
@@ -12,5 +13,12 @@ exports.data = function() {
                     }
                 })
             });
+    }*/
+
+
+    for (let i = 0 ; i < fox.attacks.special.length ; i++){
+        if (fox.attacks.special[i].description === specials[3]){
+
+        }
     }
-}
+};
