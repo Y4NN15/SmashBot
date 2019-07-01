@@ -27,6 +27,7 @@ client.on("message", async message => {
         case 'bonjour':
             message.channel.send("Salut :)");
             break;
+            // TODO check characters
         case 'get':
             message.channel.send("Oui oui t'auras tes infos bientôt c bon là");
             break;
