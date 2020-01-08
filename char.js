@@ -199,29 +199,68 @@ exports.attack = async function(type, attack, char){
     }
 };
 
+// building the answer
 exports.card = async function(move){
-    /*const embed = new Discord.RichEmbed()
-        .setTitle("Fox " + move.description)
-        .setColor(3447003)
-        .setDescription("Frames")
-        .setThumbnail('https://i.imgur.com/e6iqFph.png')
-        .addField("Total Frames", move.total_frames, true)
-        .addField('Starting Frame', move.hit_start, true)
-        .setImage(await this.gif(move.gif_id))
-        .addBlankField(true);*/
-    const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
-        "_Total Frames_ : " + move.total_frames + "\n" +
-        "_Starting Active Frame_ : " + move.active_start + "\n" +
-        "_Ending Active Frame_ : " + move.active_end + "\n" +
-        "_IASA_ : " + move.iasa + "\n" +
-        "_Frame Advantage_ : TBA" + "\n\n"
-        + await this.gif(move.gif_id);
-    return msg; /*return embed;*/
+
+    // base of the answer - name, attack, total frames
+    const msg = "**" + move.charid + " " + move.description + "**\n\n" + "`Total Frames` " + move.total_frames + "\n";
+    
+    // first hitbox active frames
+    if (move.hit_start != 0) {
+        msg += "`Active Frames` " + move.hit_start + "-" + move.hit_end + "\n";
+    }
+
+    // TODO do the rest
+    
+    // obsolete - need to rewrite
+    if (move.hit_second_start == 0) {
+
+        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
+            "`Total Frames` " + move.total_frames + "\n" +
+            "`Active Frames` " + move.hit_start + "-" + move.hit_end + "\n" +
+            "`IASA` " + move.iasa + "\n" +  
+            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
+            "`Shieldstun` TBA" + "\n\n"
+            + await this.gif(move.gif_id);
+        return msg;
+
+    } else if (move.hit_third_start == 0) {
+        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
+            "`Total Frames` " + move.total_frames + "\n" +
+            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + "\n" +
+            "`IASA` " + move.iasa + "\n" +  
+            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
+            "`Shieldstun` TBA" + "\n\n"
+            + await this.gif(move.gif_id);
+        return msg;
+    } else if (move.hit_fourth_start == 0) {
+        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
+            "`Total Frames` " + move.total_frames + "\n" +
+            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + ", " + move.hit_third_start + "-" + move.hit_third_end + "\n" +
+            "`IASA` " + move.iasa + "\n" + 
+            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
+            "`Shieldstun` TBA" + "\n\n"
+            + await this.gif(move.gif_id);
+        return msg;
+    } else {
+        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
+            "`Total Frames` " + move.total_frames + "\n" +
+            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + ", " + move.hit_third_start + "-" + move.hit_third_end + ", " + move.hit_fourth_start + "-" + move.hit_fourth_end + "\n" +
+            "`IASA` " + move.iasa + "\n" +  
+            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
+            "`Shieldstun` TBA" + "\n\n"
+            + await this.gif(move.gif_id);
+        return msg;
+    }
 };
 
+// get the gifs
+// TODO script to get all the URLs locally
 exports.gif = async function(id){
+
     let rep = await fetch('https://smashlounge.herokuapp.com/gif/' + id).then(response => response.json());
     let url = rep.url;
     return "https://gfycat.com/" + url;
+
 };
 
