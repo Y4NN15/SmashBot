@@ -203,55 +203,58 @@ exports.attack = async function(type, attack, char){
 exports.card = async function(move){
 
     // base of the answer - name, attack, total frames
-    const msg = "**" + move.charid + " " + move.description + "**\n\n" + "`Total Frames` " + move.total_frames + "\n";
+    let msg = "**" + move.charid + " " + move.description + "**\n\n" + "`Total Frames` " + move.total_frames + "\n";
     
     // first hitbox active frames
     if (move.hit_start != 0) {
-        msg += "`Active Frames` " + move.hit_start + "-" + move.hit_end + "\n";
+        msg += "`Active Frames` " + move.hit_start + "-" + move.hit_end;
+
+        // second hitbox active frames if there's one
+        // if not, line break
+        if (move.hit_second_start != 0) {
+            msg += ", " + move.hit_second_start + "-" + move.hit_second_end;
+
+            // third hitbox active frames if there's one
+            // if not, line break
+            if (move.hit_third_start != 0) {
+                msg += ", " + move.hit_third_start + "-" + move.hit_third_end;
+
+                // fourth hitbox active frames if there's one
+                // if not, line break
+                if (move.hit_fourth_start != 0) {
+                    msg += ", " + move.hit_fourth_start + "-" + move.hit_fourth_start + "\n";
+                } else {
+                    msg += "\n";
+                }
+            } else {
+                msg += "\n";
+            }
+        } else {
+            msg += "\n";
+        }
     }
 
-    // TODO do the rest
-    
-    // obsolete - need to rewrite
-    if (move.hit_second_start == 0) {
-
-        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
-            "`Total Frames` " + move.total_frames + "\n" +
-            "`Active Frames` " + move.hit_start + "-" + move.hit_end + "\n" +
-            "`IASA` " + move.iasa + "\n" +  
-            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
-            "`Shieldstun` TBA" + "\n\n"
-            + await this.gif(move.gif_id);
-        return msg;
-
-    } else if (move.hit_third_start == 0) {
-        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
-            "`Total Frames` " + move.total_frames + "\n" +
-            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + "\n" +
-            "`IASA` " + move.iasa + "\n" +  
-            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
-            "`Shieldstun` TBA" + "\n\n"
-            + await this.gif(move.gif_id);
-        return msg;
-    } else if (move.hit_fourth_start == 0) {
-        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
-            "`Total Frames` " + move.total_frames + "\n" +
-            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + ", " + move.hit_third_start + "-" + move.hit_third_end + "\n" +
-            "`IASA` " + move.iasa + "\n" + 
-            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
-            "`Shieldstun` TBA" + "\n\n"
-            + await this.gif(move.gif_id);
-        return msg;
-    } else {
-        const msg = "**" + move.charid + " " + move.description + "**" + "\n\n" +
-            "`Total Frames` " + move.total_frames + "\n" +
-            "`Active Frames` " + move.hit_start + "-" + move.hit_end + ", " + move.hit_second_start + "-" + move.hit_second_end + ", " + move.hit_third_start + "-" + move.hit_third_end + ", " + move.hit_fourth_start + "-" + move.hit_fourth_end + "\n" +
-            "`IASA` " + move.iasa + "\n" +  
-            "`Landing Lag (L-Cancelled)` " + move.landlag + " (" + move.lcancel + ")\n" +
-            "`Shieldstun` TBA" + "\n\n"
-            + await this.gif(move.gif_id);
-        return msg;
+    // IASA if there's one
+    if (move.iasa != 0) {
+        msg += "`IASA` " + move.iasa + "\n";
     }
+
+    // Landing lag + Lcancel if they exist
+    if (move.landlag != 0 && move.lcancel != 0) {
+        msg += "`Landing Lag (L-Cancelled) `" + move.landlag + " (" + move.lcancel + ")\n";
+    }
+
+    /*
+    TODO Shielstun
+    // shieldstun if there's one
+    if (move.damage != 0) {
+        msg += "`Shieldstun` " + some mathematics formula that i can find on some excel
+    } else ? maybe idk
+    */
+
+    msg += await this.gif(move.gif_id);
+
+    return msg;
 };
 
 // get the gifs

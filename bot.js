@@ -4,7 +4,6 @@ const config = require('./config.json');
 const fetch = require('node-fetch');
 const fox = require('./characters/fox.js');
 const char = require('./char.js');
-
 const data = require('./get/getTest.js');
 
 client.on("ready", () => {
